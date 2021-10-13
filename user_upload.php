@@ -4,13 +4,14 @@ include_once('db.php');
 include_once('users.php');
 
 $options = Users::getOptions();
-print_r($options);
 $isNotDryRun = isset($options['dry_run']) ? false : true;
-if (isset($options['help'])) Users::displayHelp();
+if (isset($options['help'])) {
+  Users::displayHelp();
+  die();
+}
 
 $valOptionsResult = Users::validateOptions($options);
 if ($valOptionsResult != '') {
-  print $valOptionsResult;
   die("Error: Invalid command line options. Include --help option to display list of directives with details. Exit script.");
 }
 
@@ -29,6 +30,11 @@ if (isset($options['create_table']) && $isNotDryRun) {
   else {
     print "Error: Unable to create users table, exit script.";
   }
+    die();
+}
+
+if (!Users::isTableExists('users', $dbHandle)) {
+  print "Error: users tables does not exists. Run 'create table' command. Exit script.";
   die();
 }
 

@@ -47,7 +47,7 @@ class Users {
     $message .= "-p [MySQL password] \n";
     $message .= "-h [MySQL hostname] \n";
     $message .= "-d [MYSQL database] \n";
-    $message .= "e.g. php user_upload.php --file users.csv -u root -p my_password -h localhost -d my_database --create_table --dry_run \n";
+    $message .= "e.g. php user_upload.php --file users.csv -u root -p my_password -h localhost -d my_database \n";
 
     print $message;
   }
@@ -118,6 +118,15 @@ class Users {
       return true;
     }
 
+    return false;
+  }
+
+  public static function isTableExists($table, $dbhandle) {
+    if ($result = $dbhandle->query("SHOW TABLES LIKE '".$table."'")) {
+      if($result->num_rows == 1) {
+        return true;
+      }
+    }
     return false;
   }
 
